@@ -4,6 +4,29 @@ from PyQt5.QtWidgets import *
 app = QApplication([])
 
 
+app.setStyleSheet("""
+        QWidget{
+            background: #969696 ;
+        }
+
+        QPushButton
+        {
+            background-color: #4dd5ff ;
+            border-width: 9px ;
+            border-style: solid ;
+            border-color: yellow ;
+            border-radius: 20px ;
+            font-family: Harrington;
+            font-size: 22px ;
+            min-width: 6em ;
+            padding: 6px ;
+            color: purple ;
+        }
+""")
+
+
+
+
 window = QWidget()
 
 dir_btn = QPushButton('Папка')
