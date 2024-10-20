@@ -1,7 +1,7 @@
 import os
-from PIL import Image.Qt
-from PIL.ImageQt import QImage
-from PyQt5.QtGui import QPixmap
+from PIL import Image
+
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import *
 
 def pil2pixmap(im):
