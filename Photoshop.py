@@ -1,5 +1,5 @@
 import os
-from PIL import Image
+from PIL import Image, ImageFilter, ImageEnhance
 
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import *
@@ -24,6 +24,7 @@ class PhotoManager:
         self.photo = None
         self.dir_btn = None
         self.filename = None
+        self.image_lbl = None
 
     def load(self):
         image_path = os.path.join(self.folder, self.filename)
@@ -34,6 +35,38 @@ class PhotoManager:
         pixels = pixels.scaledToWidth(500)
         image_lbl.setPixmap(pixels)
 
+    def bw(self):
+        self.photo = self.photo.convert("L")
+        self.show_images(self.image_lbl)
+
+    def leften(self):
+        self.photo = self.photo.transpose(Image.ROTATE_90)
+        self.show_images(self.image_lbl)
+
+    def mirron(self):
+        self.photo = self.photo.transpose(Image.FLIP_LEFT_RIGHT)
+        self.show_images(self.image_lbl)
+
+    def risk(self):
+        self.photo = self.photo.filter(ImageFilter.SHARPEN)
+        self.show_images(self.image_lbl)
+
+    def countery(self):
+        self.photo = self.photo.filter(ImageFilter.CONTOUR)
+        self.show_images(self.image_lbl)
+
+
+    def details(self):
+        self.photo = self.photo.filter(ImageFilter.DETAIL)
+        self.show_images(self.image_lbl)
+
+    def rozmivan(self):
+        self.photo = self.photo.filter(ImageFilter.BLUR)
+        self.show_images(self.image_lbl)
+
+    def nas(self):
+        self.photo = ImageEnhance.Color(self.photo).enhance(1.5)
+        self.show_images(self.image_lbl)
 
 
 app = QApplication([])
@@ -67,11 +100,17 @@ window = QWidget()
 dir_btn = QPushButton('Папка')
 image_lbl = QLabel('Картинка')
 images_list = QListWidget()
-filter1_btn = QPushButton('Фільтер1')
-filter2_btn = QPushButton('Фільтер2')
-filter3_btn = QPushButton('Фільтер3')
-filter4_btn = QPushButton('Фільтер4')
-filter5_btn = QPushButton('Фільтер5')
+countur = QPushButton('Накладання контурів')
+sharpness = QPushButton('Різкість')
+mirror = QPushButton('Відзеркалення')
+left = QPushButton('Вліво')
+chb = QPushButton('Ч/Б')
+
+
+
+detalizanion = QPushButton('Збільшення деталізації')
+rozmivania = QPushButton('Розмивання')
+nasich  = QPushButton('Збільшення насиченості')
 
 
 
@@ -86,15 +125,22 @@ v2.addWidget(image_lbl)
 mainline.addLayout(v2)
 
 h1 = QHBoxLayout()
-h1.addWidget(filter1_btn)
-h1.addWidget(filter2_btn)
-h1.addWidget(filter3_btn)
-h1.addWidget(filter4_btn)
-h1.addWidget(filter5_btn)
+h1.addWidget(countur)
+h1.addWidget(sharpness)
+h1.addWidget(mirror)
+h1.addWidget(left)
+h1.addWidget(chb)
 v2.addLayout(h1)
 
-photo_manager = PhotoManager()
+h2 = QHBoxLayout()
+h2.addWidget(detalizanion)
+h2.addWidget(rozmivania)
+h2.addWidget(nasich)
+v2.addLayout(h2)
 
+
+photo_manager = PhotoManager()
+photo_manager.image_lbl = image_lbl
 def open_folder():
     photo_manager.folder = QFileDialog.getExistingDirectory()
     files = os.listdir(photo_manager.folder)
@@ -112,6 +158,14 @@ def show_chosen_image():
 
 
 images_list.currentRowChanged.connect(show_chosen_image)
+chb.clicked.connect(photo_manager.bw)
+left.clicked.connect(photo_manager.leften)
+mirror.clicked.connect(photo_manager.mirron)
+sharpness.clicked.connect(photo_manager.risk)
+countur.clicked.connect(photo_manager.countery)
+detalizanion.clicked.connect(photo_manager.details)
+rozmivania.clicked.connect(photo_manager.rozmivan)
+nasich.clicked.connect(photo_manager.nas)
 dir_btn.clicked.connect(open_folder)
 window.setLayout(mainline)
 window.show()
